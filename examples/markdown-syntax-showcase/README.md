@@ -1,36 +1,56 @@
----
+***
+
 title: "Markdown Syntax Showcase"
 description: "A comprehensive example of Markdown syntax supported by mdast."
 author: "Mayank Chaudhari"
 date: "2025-03-03"
-categories: [Markdown, Syntax, Documentation]
-tags: [mdast, markdown, reference]
----
+categories: \[Markdown, Syntax, Documentation]
+tags: \[mdast, markdown, reference]
+-----------------------------------
 
 # Markdown Syntax Showcase
 
 ## Table of Contents
 
-- [Basic Elements](#1-basic-elements)
-  - [Headings](#headings)
-  - [Text Formatting](#text-formatting)
-  - [Blockquote](#blockquote)
-  - [Horizontal Rule](#horizontal-rule)
-- [Lists](#2-lists)
-  - [Unordered List](#unordered-list)
-  - [Ordered List](#ordered-list)
-- [Code Blocks](#3-code-blocks)
-- [Tables](#4-tables)
-- [Links and Images](#5-links-and-images)
-- [Task Lists](#6-task-lists-gfm)
-- [Footnotes](#7-footnotes)
-- [Emoji](#8-emoji-gfm)
-- [Math Equations](#9-math-equations-katex--latex)
-- [Diagrams](#10-diagrams-mermaid)
-- [Definition Lists](#11-definition-lists)
-- [Admonitions](#12-admonitions-callouts)
-- [HTML Elements](#13-html-elements)
-- [Custom Directives](#14-custom-directives-mdx)
+* [Basic Elements](#1-basic-elements)
+
+  * [Headings](#headings)
+
+  * [Text Formatting](#text-formatting)
+
+  * [Blockquote](#blockquote)
+
+  * [Horizontal Rule](#horizontal-rule)
+
+* [Lists](#2-lists)
+
+  * [Unordered List](#unordered-list)
+
+  * [Ordered List](#ordered-list)
+
+* [Code Blocks](#3-code-blocks)
+
+* [Tables](#4-tables)
+
+* [Links and Images](#5-links-and-images)
+
+* [Task Lists](#6-task-lists-gfm)
+
+* [Footnotes](#7-footnotes)
+
+* [Emoji](#8-emoji-gfm)
+
+* [Math Equations](#9-math-equations-katex--latex)
+
+* [Diagrams](#10-diagrams-mermaid)
+
+* [Definition Lists](#11-definition-lists)
+
+* [Admonitions](#12-admonitions-callouts)
+
+* [HTML Elements](#13-html-elements)
+
+* [Custom Directives](#14-custom-directives-mdx)
 
 ## 1. Basic Elements
 
@@ -66,9 +86,11 @@ The smallest heading, typically used for fine details.
 >
 > > ##### Nested Blockquote Level 2
 > >
-> > - List inside a blockquote:
-> >   - **Bold Text** inside a list
-> >   - `Inline Code` inside a list
+> > * List inside a blockquote:
+> >
+> >   * **Bold Text** inside a list
+> >
+> >   * `Inline Code` inside a list
 > >
 > > ```javascript
 > > console.log("Code inside a blockquote list");
@@ -76,10 +98,13 @@ The smallest heading, typically used for fine details.
 
 ### Text Formatting
 
-- **Bold text `with code`**
-- _Italic text_
-- ~~Strikethrough~~
-- `Inline code`
+* **Bold text** **`with code`**
+
+* _Italic text_
+
+* ~~Strikethrough~~
+
+* `Inline code`
 
 ### Blockquote
 
@@ -87,9 +112,11 @@ The smallest heading, typically used for fine details.
 >
 > > Another level of nesting.
 > >
-> > - List item 1
-> > - List item 2
-> >   - Subitem inside blockquote
+> > * List item 1
+> >
+> > * List item 2
+> >
+> >   * Subitem inside blockquote
 > >
 > > ```python
 > > def nested_function():
@@ -98,22 +125,27 @@ The smallest heading, typically used for fine details.
 
 ### Horizontal Rule
 
----
+***
 
 ## 2. Lists
 
 ### Unordered List
 
-- Item 1
-- Item 2
-  - Subitem 1
-  - Subitem 2
-- Item 3
+* Item 1
+
+* Item 2
+
+  * Subitem 1
+
+  * Subitem 2
+
+* Item 3
 
 ### Ordered List
 
 1. First item
 2. Second item
+
    1. Subitem 1
    2. Subitem 2
 3. Third item
@@ -210,23 +242,24 @@ Data URL:
 This is an example of using reference-style links in Markdown.
 
 You can define a reference link like this\
-[OpenAI][openai] is an AI research and deployment company.
+[OpenAI](https://openai.com "OpenAI Website") is an AI research and deployment company.
 
-Markdown syntax is explained in detail on [Markdown Guide][md-guide].
-
-[openai]: https://openai.com "OpenAI Website"
-[md-guide]: https://www.markdownguide.org "Markdown Guide"
+Markdown syntax is explained in detail on [Markdown Guide](https://www.markdownguide.org "Markdown Guide").
 
 ## 6. Task Lists (GFM)
 
 Checkable task lists.
 
-- [x] Task 1 - Completed
-- [ ] Task 2 - Pending
-- [ ] Task 3 - Pending
-  - [x] Subtask 3.1 - Done
-  - [ ] Subtask 3.2 - Pending
-- [x] Task 6 - Approved
+* [x] Task 1 - Completed
+
+* [ ] Task 2 - Pending
+
+* [ ] Task 3 - Pending
+  * [x] Subtask 3.1 - Done
+
+  * [ ] Subtask 3.2 - Pending
+
+* [x] Task 6 - Approved
 
 ## 7. Footnotes
 
@@ -256,13 +289,19 @@ $$
 
 ### Common Math Symbols
 
-- Greek letters: $\alpha$, $\beta$, $\gamma$, $\Gamma$, $\Delta$, $\pi$
-- Fractions: $\frac{1}{2}$, $\frac{x+y}{z}$
-- Square roots: $\sqrt{x}$, $\sqrt[3]{y}$
-- Summations: $\sum_{i=1}^n i$, $\prod_{j=1}^m j$
-- Integrals: $\int_a^b f(x) dx$
-- Limits: $\lim_{x \to \infty} \frac{1}{x}$
-- Matrices: $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$
+* Greek letters: $\alpha$, $\beta$, $\gamma$, $\Gamma$, $\Delta$, $\pi$
+
+* Fractions: $\frac{1}{2}$, $\frac{x+y}{z}$
+
+* Square roots: $\sqrt{x}$, $\sqrt[3]{y}$
+
+* Summations: $\sum_{i=1}^n i$, $\prod_{j=1}^m j$
+
+* Integrals: $\int_a^b f(x) dx$
+
+* Limits: $\lim_{x \to \infty} \frac{1}{x}$
+
+* Matrices: $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$
 
 ### Alignments
 
@@ -389,6 +428,6 @@ Indentation and formatting etc. here should be preserved.
 >   </tr>
 > </table>
 
----
+***
 
 This document covers most of the syntax supported by Markdown, including extended features such as GFM, math, diagrams, and HTML components.

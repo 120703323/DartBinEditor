@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useCallback, useState } from "react"
 import { EditorView, keymap, placeholder } from "@codemirror/view"
 import { EditorState } from "@codemirror/state"
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown"
-import { defaultKeymap, historyKeymap, history as historyExtension } from "@codemirror/commands"
+import { defaultKeymap, historyKeymap, history } from "@codemirror/commands"
 import { invoke } from "@tauri-apps/api/core"
 import { marked } from "marked"
 import { useEditorStore } from "../../stores/editor"
@@ -16,24 +16,51 @@ export function CodeMirrorEditor() {
   const [content, setContent] = useState("")
   const [userEdited, setUserEdited] = useState(false)
   const isLoadingRef = useRef(false)
-  const initRef = useRef(false)
 
-  // Create editor once on mount
+  const loadFile = useCallback(async (path: string) => {
+    isLoadingRef.current = true
+    try {
+      const text = await invoke<string>("read_file", { path })
+      setContent(text)
+      if (viewRef.current) {
+        viewRef.current.dispatch({
+          changes: { from: 0, to: viewRef.current.state.doc.length, insert: text },
+        })
+      }
+    } catch {
+      setContent("")
+      if (viewRef.current) {
+        viewRef.current.dispatch({
+          changes: { from: 0, to: viewRef.current.state.doc.length, insert: "" },
+        })
+      }
+    } finally {
+      isLoadingRef.current = false
+    }
+  }, [])
+
   useEffect(() => {
-    if (!editorContainerRef.current || viewRef.current) return
+    if (!activeFile) {
+      setContent("")
+      setUserEdited(false)
+      return
+    }
+    loadFile(activeFile)
+  }, [activeFile, loadFile])
 
+  useEffect(() => {
+    if (!editorContainerRef.current) return
     const updateListener = EditorView.updateListener.of((update) => {
-      if (update.docChanged && !isLoadingRef.current) {
-        setUserEdited(true)
+      if (update.docChanged) {
         setContent(update.state.doc.toString())
+        setUserEdited(true)
       }
     })
-
     const state = EditorState.create({
-      doc: "",
+      doc: content,
       extensions: [
         keymap.of([...defaultKeymap, ...historyKeymap]),
-        historyExtension(),
+        history(),
         markdown({ base: markdownLanguage }),
         EditorView.lineWrapping,
         placeholder("开始写作..."),
@@ -49,57 +76,15 @@ export function CodeMirrorEditor() {
         }),
       ],
     })
-
     const view = new EditorView({ state, parent: editorContainerRef.current })
     viewRef.current = view
-    initRef.current = true
-
     return () => {
       view.destroy()
       viewRef.current = null
-      initRef.current = false
     }
   }, [])
 
-  // Load file when activeFile changes
-  useEffect(() => {
-    if (!activeFile) {
-      setContent("")
-      setUserEdited(false)
-      if (viewRef.current) {
-        viewRef.current.dispatch({
-          changes: { from: 0, to: viewRef.current.state.doc.length, insert: "" },
-        })
-      }
-      return
-    }
-
-    isLoadingRef.current = true
-    invoke<string>("read_file", { path: activeFile })
-      .then((text) => {
-        setContent(text)
-        setUserEdited(false)
-        if (viewRef.current) {
-          viewRef.current.dispatch({
-            changes: { from: 0, to: viewRef.current.state.doc.length, insert: text },
-          })
-        }
-      })
-      .catch(() => {
-        setContent("")
-        if (viewRef.current) {
-          viewRef.current.dispatch({
-            changes: { from: 0, to: viewRef.current.state.doc.length, insert: "" },
-          })
-        }
-      })
-      .finally(() => {
-        isLoadingRef.current = false
-      })
-  }, [activeFile])
-
   useFileAutoSave(content, userEdited)
-
   const previewHtml = content ? (marked(content) as string) : ""
 
   if (!activeFile) {
@@ -115,21 +100,15 @@ export function CodeMirrorEditor() {
 
   if (isSourceMode) {
     return (
-      <div style={{ position: "absolute", inset: 0 }}>
-        <div ref={editorContainerRef} style={{ height: "100%", overflow: "hidden" }} />
-      </div>
+      <div ref={editorContainerRef} className="h-full" style={{ position: "relative", height: "100%" }} />
     )
   }
 
   return (
-    <div className="flex" style={{ height: "100%", overflow: "hidden" }}>
-      <div style={{ width: "50%", height: "100%", position: "relative", borderRight: "1px solid var(--color-border)" }}>
-        <div ref={editorContainerRef} style={{ position: "absolute", inset: 0 }} />
-      </div>
-      <div
-        style={{ width: "50%", height: "100%", overflow: "auto", padding: "24px", backgroundColor: "var(--color-background)" }}
-        dangerouslySetInnerHTML={{ __html: previewHtml }}
-      />
-    </div>
+    <div
+      className="h-full overflow-y-auto p-8 bg-background"
+      style={{ height: "100%", overflow: "auto" }}
+      dangerouslySetInnerHTML={{ __html: previewHtml }}
+    />
   )
 }
