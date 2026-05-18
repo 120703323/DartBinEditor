@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { TipTapEditor } from "./components/editor/TipTapEditor"
+import { CodeMirrorEditor } from "./components/editor/CodeMirrorEditor"
 import { EditorToolbar } from "./components/editor/EditorToolbar"
 import { TabBar } from "./components/editor/TabBar"
 import { FileTree } from "./components/sidebar/FileTree"
@@ -77,7 +77,7 @@ function App() {
           <EditorToolbar />
           <div className="flex-1 overflow-hidden">
             <ErrorBoundary>
-              <TipTapEditor />
+              <CodeMirrorEditor />
             </ErrorBoundary>
           </div>
 
