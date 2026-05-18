@@ -4,6 +4,7 @@ import StarterKit from "@tiptap/starter-kit"
 import Placeholder from "@tiptap/extension-placeholder"
 import Underline from "@tiptap/extension-underline"
 import ImageExtension from "@tiptap/extension-image"
+import { marked } from "marked"
 import { invoke } from "@tauri-apps/api/core"
 import { useEditorStore } from "../../stores/editor"
 import { useFileAutoSave } from "../../hooks/useFileAutoSave"
@@ -57,7 +58,8 @@ export function TipTapEditor() {
       .then((text) => {
         if (!cancelled && editor && !editor.isDestroyed) {
           suppressUpdateRef.current = true
-          editor.commands.setContent(text)
+          const html = marked(text) as string
+          editor.commands.setContent(html)
           suppressUpdateRef.current = false
         }
       })
