@@ -17,6 +17,7 @@ interface EditorStore {
   focusMode: boolean
   searchQuery: string
   searchResults: SearchResult[]
+  currentDir: string
   setTheme: (theme: "light" | "dark" | "system") => void
   setActiveFile: (path: string | null) => void
   openFile: (path: string) => void
@@ -27,6 +28,7 @@ interface EditorStore {
   toggleFocusMode: () => void
   setSearchQuery: (query: string) => void
   setSearchResults: (results: SearchResult[]) => void
+  setCurrentDir: (dir: string) => void
 }
 
 export const useEditorStore = create<EditorStore>((set) => ({
@@ -39,6 +41,7 @@ export const useEditorStore = create<EditorStore>((set) => ({
   focusMode: false,
   searchQuery: "",
   searchResults: [],
+  currentDir: ".",
   setTheme: (theme) => set({ theme }),
   setActiveFile: (path) => set({ activeFile: path }),
   openFile: (path) =>
@@ -64,4 +67,5 @@ export const useEditorStore = create<EditorStore>((set) => ({
   toggleFocusMode: () => set((state) => ({ focusMode: !state.focusMode })),
   setSearchQuery: (query) => set({ searchQuery: query }),
   setSearchResults: (results) => set({ searchResults: results }),
+  setCurrentDir: (dir) => set({ currentDir: dir }),
 }))

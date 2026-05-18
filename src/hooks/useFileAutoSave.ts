@@ -2,7 +2,10 @@ import { useEffect, useRef, useCallback } from "react"
 import { invoke } from "@tauri-apps/api/core"
 import { useEditorStore } from "../stores/editor"
 
-export function useFileAutoSave(htmlContent: string | undefined) {
+export function useFileAutoSave(
+  htmlContent: string | undefined,
+  userEdited: boolean,
+) {
   const { activeFile } = useEditorStore()
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const savedContentRef = useRef(htmlContent)
@@ -24,7 +27,7 @@ export function useFileAutoSave(htmlContent: string | undefined) {
   }, [activeFile])
 
   useEffect(() => {
-    if (!activeFile) return
+    if (!activeFile || !userEdited) return
 
     if (timerRef.current) clearTimeout(timerRef.current)
 
@@ -35,7 +38,7 @@ export function useFileAutoSave(htmlContent: string | undefined) {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [htmlContent, activeFile, save])
+  }, [htmlContent, activeFile, save, userEdited])
 
   const saveNow = useCallback(async () => {
     if (timerRef.current) clearTimeout(timerRef.current)

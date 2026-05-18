@@ -7,6 +7,7 @@ import { SearchPanel } from "./components/sidebar/SearchPanel"
 import { OutlinePanel } from "./components/sidebar/OutlinePanel"
 import { TagPanel } from "./components/sidebar/TagPanel"
 import { CommandPalette } from "./components/panels/CommandPalette"
+import { ErrorBoundary } from "./components/ErrorBoundary"
 import { useEditorStore } from "./stores/editor"
 import "./globals.css"
 
@@ -20,7 +21,7 @@ const tabs: { key: SidebarTab; label: string }[] = [
 ]
 
 function App() {
-  const { theme, isSidebarOpen, toggleSidebar, activeFile } = useEditorStore()
+  const { theme, isSidebarOpen, activeFile } = useEditorStore()
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>("files")
 
   useEffect(() => {
@@ -40,23 +41,6 @@ function App() {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-background text-foreground overflow-hidden">
-      <header className="h-10 flex items-center px-4 bg-sidebar-bg border-b border-border select-none shrink-0">
-        <button
-          onClick={toggleSidebar}
-          className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground"
-          aria-label="Toggle sidebar"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
-        <span className="ml-3 text-sm font-ui font-medium text-foreground/80">
-          DartBinEditor
-        </span>
-      </header>
-
       <div className="flex flex-1 overflow-hidden">
         <aside
           className={`flex-shrink-0 bg-sidebar-bg border-r border-border transition-all duration-200 ease-out overflow-hidden ${
@@ -79,10 +63,12 @@ function App() {
                 </button>
               ))}
             </div>
-            {sidebarTab === "files" && <FileTree />}
-            {sidebarTab === "search" && <SearchPanel />}
-            {sidebarTab === "outline" && <OutlinePanel />}
-            {sidebarTab === "tags" && <TagPanel />}
+            <ErrorBoundary>
+              {sidebarTab === "files" && <FileTree />}
+              {sidebarTab === "search" && <SearchPanel />}
+              {sidebarTab === "outline" && <OutlinePanel />}
+              {sidebarTab === "tags" && <TagPanel />}
+            </ErrorBoundary>
           </div>
         </aside>
 
@@ -90,7 +76,9 @@ function App() {
           <TabBar />
           <EditorToolbar />
           <div className="flex-1 overflow-hidden">
-            <TipTapEditor />
+            <ErrorBoundary>
+              <TipTapEditor />
+            </ErrorBoundary>
           </div>
 
           <footer className="h-7 flex items-center px-4 bg-sidebar-bg border-t border-border text-xs text-muted-foreground font-ui shrink-0">

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useCallback, useState } from "react"
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import Placeholder from "@tiptap/extension-placeholder"
@@ -13,18 +13,15 @@ import { CodeBlockExtension } from "./CodeBlockExtension"
 
 export function TipTapEditor() {
   const { activeFile, isSourceMode } = useEditorStore()
-  const [content, setContent] = useState("")
   const editorContainerRef = useRef<HTMLDivElement>(null)
+  const [userEdited, setUserEdited] = useState(false)
+  const suppressUpdateRef = useRef(false)
 
-  useEffect(() => {
-    if (!activeFile) {
-      setContent("")
-      return
+  const onUpdate = useCallback(() => {
+    if (!suppressUpdateRef.current) {
+      setUserEdited(true)
     }
-    invoke<string>("read_file", { path: activeFile })
-      .then((text) => setContent(text))
-      .catch(() => setContent(""))
-  }, [activeFile])
+  }, [])
 
   const editor = useEditor({
     extensions: [
@@ -33,28 +30,50 @@ export function TipTapEditor() {
         codeBlock: false,
       }),
       Placeholder.configure({
-        placeholder: activeFile ? "开始写作..." : "打开一个文件开始编辑",
+        placeholder: "开始写作...",
       }),
       Underline,
       ImageExtension.configure({ inline: false, allowBase64: true }),
       CodeBlockExtension,
     ],
-    content,
+    content: "",
     editorProps: {
       attributes: { class: "tiptap-editor" },
     },
-    immediatelyRender: false,
+    onUpdate,
   })
 
   useEffect(() => {
-    if (editor && content) {
-      editor.commands.setContent(content)
+    if (!editor) return
+    setUserEdited(false)
+    suppressUpdateRef.current = true
+    if (!activeFile) {
+      editor.commands.setContent("")
+      suppressUpdateRef.current = false
+      return
     }
-  }, [editor, activeFile])
+    let cancelled = false
+    invoke<string>("read_file", { path: activeFile })
+      .then((text) => {
+        if (!cancelled && editor && !editor.isDestroyed) {
+          suppressUpdateRef.current = true
+          editor.commands.setContent(text)
+          suppressUpdateRef.current = false
+        }
+      })
+      .catch(() => {
+        if (!cancelled && editor && !editor.isDestroyed) {
+          suppressUpdateRef.current = true
+          editor.commands.setContent("")
+          suppressUpdateRef.current = false
+        }
+      })
+    return () => { cancelled = true }
+  }, [editor, activeFile, onUpdate])
 
   const htmlContent = editor?.getHTML()
 
-  useFileAutoSave(htmlContent)
+  useFileAutoSave(htmlContent, userEdited)
   useMermaidRenderer(editorContainerRef)
   useMathRenderer(editorContainerRef)
 
