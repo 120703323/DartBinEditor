@@ -20,7 +20,14 @@ export default defineConfig(async () => ({
         }
       : undefined,
     watch: {
-      ignored: ["**/src-tauri/**"],
+      ignored: ["**/src-tauri/**", "**/*.md", "**/*.txt"],
     },
+  },
+  build: {
+    target: "esnext",
+    minify: "esbuild",
+  },
+  optimizeDeps: {
+    include: ["@tauri-apps/api", "@tauri-apps/api/core", "@tauri-apps/plugin-dialog"],
   },
 }));

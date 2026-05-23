@@ -73,12 +73,18 @@ export function FileTree() {
     setCurrentDir(parent)
   }
 
-  const dirName = currentDir === "." ? "."
-    : currentDir.split("\\").filter(Boolean).pop() || currentDir
+  const formatPath = (path: string) => {
+    if (path === ".") return "."
+    const parts = path.split("\\").filter(Boolean)
+    if (parts.length <= 3) return path
+    const first = parts[0]
+    const last2 = parts.slice(-2).join("\\")
+    return `${first}\\...\\${last2}`
+  }
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-2 py-3">
+      <div className="flex items-center justify-between px-2 py-2 border-b border-border/50">
         <span className="text-xs font-ui uppercase tracking-widest text-muted-foreground">
           文件
         </span>
@@ -118,7 +124,7 @@ export function FileTree() {
         </div>
       </div>
 
-      <div className="flex items-center gap-1 px-2 pb-2">
+      <div className="flex items-center gap-1 px-2 py-1.5 border-b border-border/30">
         {canGoUp && (
           <button
             onClick={handleGoUp}
@@ -132,12 +138,12 @@ export function FileTree() {
             </svg>
           </button>
         )}
-        <span className="text-[11px] font-ui text-muted-foreground truncate">
-          {dirName}
+        <span className="text-[11px] font-ui text-muted-foreground truncate" title={currentDir}>
+          {formatPath(currentDir)}
         </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto sidebar-scrollbar">
         {loading ? (
           <div className="text-xs text-muted-foreground px-2 py-1">加载中...</div>
         ) : entries.length === 0 ? (

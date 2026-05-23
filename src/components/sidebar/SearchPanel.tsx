@@ -82,7 +82,7 @@ export function SearchPanel() {
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto sidebar-scrollbar">
         {loading ? (
           <div className="text-xs text-muted-foreground px-2 py-1">搜索中...</div>
         ) : query && results.length === 0 ? (

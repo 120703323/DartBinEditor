@@ -1,49 +1,101 @@
 import { useEffect, useRef, useCallback } from "react"
 import { invoke } from "@tauri-apps/api/core"
-import { useEditorStore } from "../stores/editor"
 
-export function useFileAutoSave(
-  htmlContent: string | undefined,
-  userEdited: boolean,
-) {
-  const { activeFile } = useEditorStore()
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const savedContentRef = useRef(htmlContent)
+let savedContentMap = new Map<string, string>()
+let timers = new Map<string, ReturnType<typeof setTimeout>>()
 
-  useEffect(() => {
-    savedContentRef.current = htmlContent
-  }, [htmlContent])
+const manualSaveRef: { current: (() => Promise<void>) | null } = { current: null }
 
-  const save = useCallback(async () => {
-    if (!activeFile || savedContentRef.current === undefined) return
+let currentDocText = ""
+
+export function getCurrentDocText() {
+  return currentDocText
+}
+
+export function setCurrentDocText(text: string) {
+  currentDocText = text
+}
+
+export function triggerManualSave() {
+  if (manualSaveRef.current) manualSaveRef.current()
+}
+
+export function useFileAutoSave(activeFile: string | null, getContent: () => string) {
+  const contentGetterRef = useRef(getContent)
+  contentGetterRef.current = getContent
+  const activeFileRef = useRef(activeFile)
+  activeFileRef.current = activeFile
+
+  const doSave = useCallback(async (label: string) => {
+    const file = activeFileRef.current
+    const content = contentGetterRef.current()
+    if (!file || content === undefined) return
+
+    if (label === "auto") {
+      const lastSaved = savedContentMap.get(file)
+      if (content === lastSaved) return
+    }
+
     try {
-      await invoke("write_file", {
-        path: activeFile,
-        content: savedContentRef.current,
-      })
+      await invoke("write_file", { path: file, content })
+      savedContentMap.set(file, content)
+      const time = new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+      const el = document.getElementById("save-status")
+      if (el) {
+        el.textContent = `已${label === "manual" ? "手动" : "自动"}保存 ${time}`
+        el.className = "text-green-500"
+      }
     } catch (e) {
-      console.error("Auto-save failed:", e)
+      console.error("Save failed:", e)
+      const el = document.getElementById("save-status")
+      if (el) {
+        el.textContent = "保存失败"
+        el.className = "text-red-500"
+      }
     }
-  }, [activeFile])
+  }, [])
+
+  const scheduleSave = useCallback(() => {
+    const file = activeFileRef.current
+    if (!file) return
+    const content = contentGetterRef.current()
+    const lastSaved = savedContentMap.get(file)
+    if (content === lastSaved) return
+    if (timers.has(file)) clearTimeout(timers.get(file))
+    timers.set(file, setTimeout(() => doSave("auto"), 10000))
+  }, [doSave])
+
+  const markClean = useCallback((content: string) => {
+    const file = activeFileRef.current
+    if (file) {
+      savedContentMap.set(file, content)
+      const time = new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+      const el = document.getElementById("save-status")
+      if (el) {
+        el.textContent = `已自动保存 ${time}`
+        el.className = "text-green-500"
+      }
+    }
+  }, [])
 
   useEffect(() => {
-    if (!activeFile || !userEdited) return
-
-    if (timerRef.current) clearTimeout(timerRef.current)
-
-    timerRef.current = setTimeout(() => {
-      save()
-    }, 1000)
-
+    manualSaveRef.current = () => doSave("manual")
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
+      manualSaveRef.current = null
+      const file = activeFileRef.current
+      if (file && timers.has(file)) {
+        clearTimeout(timers.get(file))
+        timers.delete(file)
+      }
     }
-  }, [htmlContent, activeFile, save, userEdited])
+  }, [doSave])
 
-  const saveNow = useCallback(async () => {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    await save()
-  }, [save])
+  return { scheduleSave, markClean }
+}
 
-  return { saveNow }
+export function updateStats(lines: number, words: number) {
+  const linesEl = document.getElementById("stats-lines")
+  const wordsEl = document.getElementById("stats-words")
+  if (linesEl) linesEl.textContent = `${lines} 行`
+  if (wordsEl) wordsEl.textContent = `${words} 字`
 }
