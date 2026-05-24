@@ -58,7 +58,7 @@ export function TipTapEditor() {
       .then((text) => {
         if (!cancelled && editor && !editor.isDestroyed) {
           suppressUpdateRef.current = true
-          const html = marked(text) as string
+          const html = marked.parse(text) as string
           editor.commands.setContent(html)
           suppressUpdateRef.current = false
         }

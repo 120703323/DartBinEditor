@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="hotCore" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFBEB;stop-opacity:1"/>
+      <stop offset="20%" style="stop-color:#FCD34D;stop-opacity:0.95"/>
+      <stop offset="45%" style="stop-color:#F59E0B;stop-opacity:0.8"/>
+      <stop offset="70%" style="stop-color:#EA580C;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#9A3412;stop-opacity:0"/>
+    </radialGradient>
+    <linearGradient id="outerRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B"/>
+      <stop offset="25%" style="stop-color:#EA580C"/>
+      <stop offset="50%" style="stop-color:#DC2626"/>
+      <stop offset="75%" style="stop-color:#7C3AED"/>
+      <stop offset="100%" style="stop-color:#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="warmGlow" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#FBBF24"/>
+      <stop offset="50%" style="stop-color:#F97316"/>
+      <stop offset="100%" style="stop-color:#DC2626"/>
+    </linearGradient>
+    <linearGradient id="techBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06B6D4"/>
+      <stop offset="50%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="steamRise" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:0.6"/>
+      <stop offset="40%" style="stop-color:#FBBF24;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#FDE68A;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="warmGlowFilter"><feGaussianBlur stdDeviation="12" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="strongGlow"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="softGlow"><feGaussianBlur stdDeviation="20" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="shadow"><feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000000" flood-opacity="0.35"/></filter>
+  </defs>
+  <circle cx="512" cy="520" r="470" fill="#000" opacity="0.25" filter="url(#shadow)"/>
+  <circle cx="512" cy="512" r="470" fill="none" stroke="url(#outerRing)" stroke-width="28"/>
+  <circle cx="512" cy="512" r="440" fill="#0C0A1A"/>
+  <circle cx="512" cy="420" r="280" fill="url(#hotCore)" opacity="0.7" filter="url(#softGlow)"/>
+  <circle cx="512" cy="450" r="180" fill="url(#hotCore)" opacity="0.5"/>
+  <g opacity="0.4" filter="url(#warmGlowFilter)">
+    <path d="M 480 520 Q 470 420 490 320 Q 500 250 480 180" stroke="url(#steamRise)" stroke-width="30" fill="none" stroke-linecap="round"/>
+    <path d="M 520 520 Q 540 400 510 300 Q 500 230 530 160" stroke="url(#steamRise)" stroke-width="24" fill="none" stroke-linecap="round"/>
+    <path d="M 500 530 Q 490 430 520 340 Q 530 280 500 200" stroke="url(#steamRise)" stroke-width="18" fill="none" stroke-linecap="round"/>
+  </g>
+  <g fill="#FBBF24" opacity="0.6">
+    <circle cx="470" cy="280" r="4" filter="url(#strongGlow)"/><circle cx="530" cy="240" r="3.5" filter="url(#strongGlow)"/><circle cx="500" cy="200" r="3" filter="url(#strongGlow)"/><circle cx="460" cy="320" r="3" filter="url(#strongGlow)"/><circle cx="540" cy="300" r="2.5" filter="url(#strongGlow)"/><circle cx="490" cy="170" r="2.5" filter="url(#strongGlow)"/><circle cx="510" cy="150" r="2" filter="url(#strongGlow)"/>
+  </g>
+  <g stroke="url(#techBlue)" stroke-width="2" fill="none" opacity="0.5">
+    <path d="M 180 400 L 280 400 L 280 500"/><path d="M 200 350 L 300 350 L 300 450"/><path d="M 844 400 L 744 400 L 744 500"/><path d="M 824 350 L 724 350 L 724 450"/><path d="M 350 700 L 350 620 L 420 620"/><path d="M 674 700 L 674 620 L 604 620"/><path d="M 250 600 L 320 600 L 320 680"/><path d="M 774 600 L 704 600 L 704 680"/>
+  </g>
+  <g filter="url(#strongGlow)">
+    <circle cx="280" cy="400" r="6" fill="url(#techBlue)"/><circle cx="744" cy="400" r="6" fill="url(#techBlue)"/><circle cx="300" cy="350" r="5" fill="url(#techBlue)"/><circle cx="724" cy="350" r="5" fill="url(#techBlue)"/><circle cx="350" cy="620" r="5" fill="url(#techBlue)"/><circle cx="674" cy="620" r="5" fill="url(#techBlue)"/><circle cx="320" cy="600" r="4" fill="url(#techBlue)"/><circle cx="704" cy="600" r="4" fill="url(#techBlue)"/>
+  </g>
+  <g fill="url(#warmGlow)" opacity="0.7">
+    <circle cx="180" cy="400" r="3"/><circle cx="844" cy="400" r="3"/><circle cx="200" cy="350" r="3"/><circle cx="824" cy="350" r="3"/><circle cx="350" cy="700" r="3"/><circle cx="674" cy="700" r="3"/><circle cx="250" cy="600" r="3"/><circle cx="774" cy="600" r="3"/>
+  </g>
+  <text x="512" y="470" font-family="'Segoe UI', Arial, Helvetica, sans-serif" font-size="170" font-weight="900" fill="white" text-anchor="middle" dominant-baseline="middle" letter-spacing="-8">DB</text>
+  <text x="512" y="470" font-family="'Segoe UI', Arial, Helvetica, sans-serif" font-size="170" font-weight="900" fill="none" stroke="url(#warmGlow)" stroke-width="2" text-anchor="middle" dominant-baseline="middle" letter-spacing="-8" opacity="0.5">DB</text>
+  <text x="512" y="570" font-family="'Segoe UI', Arial, Helvetica, sans-serif" font-size="52" font-weight="300" fill="#CBD5E1" text-anchor="middle" dominant-baseline="middle" letter-spacing="14">EDITOR</text>
+  <line x1="380" y1="600" x2="644" y2="600" stroke="url(#warmGlow)" stroke-width="2" opacity="0.4"/>
+  <g opacity="0.8">
+    <circle cx="512" cy="55" r="6" fill="#FBBF24"/><circle cx="580" cy="58" r="4" fill="#F59E0B"/><circle cx="640" cy="75" r="4.5" fill="#F97316"/><circle cx="700" cy="105" r="4" fill="#EA580C"/><circle cx="755" cy="145" r="4.5" fill="#DC2626"/><circle cx="800" cy="195" r="4" fill="#8B5CF6"/><circle cx="835" cy="255" r="4.5" fill="#7C3AED"/><circle cx="860" cy="320" r="4" fill="#6366F1"/><circle cx="875" cy="390" r="5" fill="#3B82F6"/><circle cx="875" cy="460" r="4" fill="#06B6D4"/><circle cx="860" cy="530" r="4.5" fill="#3B82F6"/><circle cx="835" cy="600" r="4" fill="#6366F1"/><circle cx="800" cy="665" r="4.5" fill="#8B5CF6"/><circle cx="755" cy="720" r="4" fill="#7C3AED"/><circle cx="700" cy="760" r="4.5" fill="#DC2626"/><circle cx="640" cy="785" r="4" fill="#EA580C"/><circle cx="580" cy="800" r="4.5" fill="#F97316"/><circle cx="512" cy="805" r="6" fill="#FBBF24"/><circle cx="444" cy="800" r="4.5" fill="#F97316"/><circle cx="384" cy="785" r="4" fill="#EA580C"/><circle cx="324" cy="760" r="4.5" fill="#DC2626"/><circle cx="269" cy="720" r="4" fill="#7C3AED"/><circle cx="224" cy="665" r="4.5" fill="#8B5CF6"/><circle cx="189" cy="600" r="4" fill="#6366F1"/><circle cx="164" cy="530" r="4.5" fill="#3B82F6"/><circle cx="149" cy="460" r="4" fill="#06B6D4"/><circle cx="149" cy="390" r="5" fill="#3B82F6"/><circle cx="164" cy="320" r="4" fill="#6366F1"/><circle cx="189" cy="255" r="4.5" fill="#7C3AED"/><circle cx="224" cy="195" r="4" fill="#8B5CF6"/><circle cx="269" cy="145" r="4.5" fill="#DC2626"/><circle cx="324" cy="105" r="4" fill="#EA580C"/><circle cx="384" cy="75" r="4.5" fill="#F97316"/><circle cx="444" cy="58" r="4" fill="#F59E0B"/>
+  </g>
+  <circle cx="512" cy="512" r="455" fill="none" stroke="url(#warmGlow)" stroke-width="0.8" opacity="0.3"/>
+  <circle cx="512" cy="512" r="462" fill="none" stroke="url(#techBlue)" stroke-width="0.5" opacity="0.2"/>
+</svg>

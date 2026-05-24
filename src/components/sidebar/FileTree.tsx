@@ -69,17 +69,23 @@ export function FileTree() {
   const canGoUp = currentDir !== "." && currentDir !== ""
 
   const handleGoUp = () => {
-    const parent = currentDir.split("\\").slice(0, -1).join("\\") || "."
+    // 支持正斜杠和反斜杠
+    const separator = currentDir.includes("\\") ? "\\" : "/"
+    const parent = currentDir.split(separator).slice(0, -1).join(separator) || "."
     setCurrentDir(parent)
   }
 
   const formatPath = (path: string) => {
     if (path === ".") return "."
-    const parts = path.split("\\").filter(Boolean)
+    
+    // 支持正斜杠和反斜杠
+    const separator = path.includes("\\") ? "\\" : "/"
+    const parts = path.split(separator).filter(Boolean)
+    
     if (parts.length <= 3) return path
     const first = parts[0]
-    const last2 = parts.slice(-2).join("\\")
-    return `${first}\\...\\${last2}`
+    const last2 = parts.slice(-2).join(separator)
+    return `${first}${separator}...${separator}${last2}`
   }
 
   return (

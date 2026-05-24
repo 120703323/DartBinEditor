@@ -87,3 +87,77 @@
 .dark .cm-editor .tok-link {
   color: #60a5fa;
 }
+
+/* Markdown preview (reading mode) */
+.markdown-preview {
+  font-family: "Literata", "Georgia", serif;
+  line-height: 1.75;
+  color: var(--color-foreground);
+}
+
+.markdown-preview h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+}
+
+.markdown-preview h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.4rem;
+}
+
+.markdown-preview h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.3rem;
+}
+
+.markdown-preview p {
+  margin: 0.5rem 0;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.markdown-preview code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.875em;
+  background: var(--color-code-surface);
+  padding: 0.15em 0.3em;
+  border-radius: 0.25rem;
+}
+
+.markdown-preview pre {
+  background: var(--color-code-surface);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.markdown-preview pre code {
+  background: none;
+  padding: 0;
+}
+
+.markdown-preview blockquote {
+  border-left: 3px solid var(--color-primary);
+  margin: 1em 0;
+  padding-left: 1rem;
+  color: var(--color-muted-foreground);
+}
+
+.markdown-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.markdown-preview a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}

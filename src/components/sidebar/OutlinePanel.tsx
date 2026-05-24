@@ -133,8 +133,6 @@ export function OutlinePanel() {
 
       const scrollable = document.querySelector("[data-scroll-wrapper]") as HTMLElement
       if (scrollable && heading.lineNum !== undefined) {
-        const text = getCurrentDocText()
-        const totalLines = text.split("\n").length
         const cmContent = scrollable.querySelector(".cm-content") as HTMLElement
         if (cmContent) {
           const lineHeight = parseFloat(getComputedStyle(cmContent).lineHeight) || 20

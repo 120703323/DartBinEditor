@@ -49,13 +49,15 @@ export function CodeMirrorEditor() {
   }, [activeFile, loadFile])
 
   useEffect(() => {
-    if (!editorContainerRef.current) return
+    if (!editorContainerRef.current || viewRef.current) return
+
     const updateListener = EditorView.updateListener.of((update) => {
       if (update.docChanged) {
         setContent(update.state.doc.toString())
         setUserEdited(true)
       }
     })
+
     const state = EditorState.create({
       doc: content,
       extensions: [
@@ -76,8 +78,10 @@ export function CodeMirrorEditor() {
         }),
       ],
     })
+
     const view = new EditorView({ state, parent: editorContainerRef.current })
     viewRef.current = view
+
     return () => {
       view.destroy()
       viewRef.current = null
@@ -85,7 +89,8 @@ export function CodeMirrorEditor() {
   }, [])
 
   useFileAutoSave(content, userEdited)
-  const previewHtml = content ? (marked(content) as string) : ""
+
+  const previewHtml = content ? (marked.parse(content) as string) : ""
 
   if (!activeFile) {
     return (
@@ -98,17 +103,17 @@ export function CodeMirrorEditor() {
     )
   }
 
-  if (isSourceMode) {
-    return (
-      <div ref={editorContainerRef} className="h-full" style={{ position: "relative", height: "100%" }} />
-    )
-  }
+  const sourceContainerStyle = { position: "relative" as const, height: "100%" as const }
+  const previewStyle = { height: "100%" as const, overflow: "auto" as const, display: isSourceMode ? "none" : "block" as const }
 
   return (
-    <div
-      className="h-full overflow-y-auto p-8 bg-background"
-      style={{ height: "100%", overflow: "auto" }}
-      dangerouslySetInnerHTML={{ __html: previewHtml }}
-    />
+    <>
+      <div ref={editorContainerRef} className="h-full" style={{ ...sourceContainerStyle, display: isSourceMode ? "block" : "none" }} />
+      <div
+        className="markdown-preview h-full overflow-y-auto bg-background"
+        style={{ ...previewStyle, display: isSourceMode ? "none" : "block" }}
+        dangerouslySetInnerHTML={{ __html: previewHtml }}
+      />
+    </>
   )
 }
